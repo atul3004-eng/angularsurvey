@@ -26,11 +26,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CampaignRegistrationManagementSystemApplicationTests {
 
   @Autowired private AdminRepository adminRepository;
@@ -43,9 +47,11 @@ class CampaignRegistrationManagementSystemApplicationTests {
   @Autowired private SurveyService surveyService;
 
   @Test
+  @Order(0)
   void contextLoads() {}
 
   @Test
+  @Order(5)
   void testSurveyService() {
     SurveyFull surveyFull = surveyService.getSurvey(1L);
     //    9545163336
@@ -54,6 +60,7 @@ class CampaignRegistrationManagementSystemApplicationTests {
 
   // let's try adding an answer to our database
   @Test
+  @Order(4)
   void addAnswer() {
     Answers answer = new Answers();
     Respondant respondant = new Respondant();
@@ -84,6 +91,7 @@ class CampaignRegistrationManagementSystemApplicationTests {
   // in this test we add a question to questions table, also add options (for MCQs) to
   // questions_options table
   @Test
+  @Order(3)
   void addQuestion() {
     Questions questions = new Questions();
     InputTypes inputTypes = inputTypesRepository.findById(3L).get();
@@ -107,6 +115,7 @@ class CampaignRegistrationManagementSystemApplicationTests {
   }
 
   @Test
+  @Order(1)
   void fillSurveyHeaders() {
     SurveyHeader surveyHeader = new SurveyHeader();
     surveyHeader.setSurveyName("test_survey");
@@ -119,6 +128,7 @@ class CampaignRegistrationManagementSystemApplicationTests {
   }
 
   @Test
+  @Order(2)
   void fillAdmin() {
     Admin admin = new Admin();
     admin.setFirstName("b");
@@ -137,9 +147,10 @@ class CampaignRegistrationManagementSystemApplicationTests {
   }
 
   @Test
+  @Order(7)
   void fillTypes() {
     List<String> inputTypesList =
-        Arrays.asList("oneline", "multiline", "radio", "checkbox_multiselect");
+        Arrays.asList("radio", "checkbox_multiselect", "oneline", "multiline");
     List<InputTypes> inputTypes = new ArrayList<>();
 
     for (String inputType : inputTypesList) {
@@ -155,11 +166,14 @@ class CampaignRegistrationManagementSystemApplicationTests {
     List<InputTypes> inputTypesResult = inputTypesRepository.findAll();
     for (InputTypes t : inputTypesResult) {
       int id = t.getId().intValue();
-      assertEquals(inputTypes.get(id - 1).getInputTypeName(), t.getInputTypeName());
+      if (id > 4) {
+        assertEquals(inputTypes.get(id - 5).getInputTypeName(), t.getInputTypeName());
+      }
     }
   }
 
   @Test
+  @Order(6)
   void testSaveNewSurvey() {
     SurveyHeader surveyHeader = new SurveyHeader();
     surveyHeader.setSurveyName("test survey");

@@ -5,7 +5,7 @@ import { Respondant } from 'src/app/common/respondant';
 import { SurveyFull } from 'src/app/common/survey-full';
 
 import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
-import { saveAs } from "file-saver/src/FileSaver";
+import { saveAs } from "file-saver";
 import * as XLSX from 'xlsx';
 import { AuthService } from 'src/app/services/auth.service';
 import { Response } from 'src/app/common/response';
