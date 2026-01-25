@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
 public class MyDataRestConfig implements RepositoryRestConfigurer {
@@ -17,7 +18,7 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
   private EntityManager entityManager;
 
   @Override
-  public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
+  public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
 
     // call an internal helper method to expose ids
     exposeIds(config);
