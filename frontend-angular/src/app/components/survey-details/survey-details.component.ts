@@ -4,7 +4,7 @@ import { DbServiceService } from 'src/app/services/db-service.service';
 import { Respondant } from 'src/app/common/respondant';
 import { SurveyFull } from 'src/app/common/survey-full';
 
-import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
+
 import { saveAs } from "file-saver";
 import * as XLSX from 'xlsx';
 import { AuthService } from 'src/app/services/auth.service';
@@ -34,7 +34,7 @@ export class SurveyDetailsComponent implements OnInit {
   type = "BarChart";
   data = [];
 
-  constructor(private route: ActivatedRoute, private dbService: DbServiceService, private exportAsService: ExportAsService,
+  constructor(private route: ActivatedRoute, private dbService: DbServiceService,
     private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
