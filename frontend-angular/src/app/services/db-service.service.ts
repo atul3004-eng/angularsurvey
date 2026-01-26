@@ -48,7 +48,7 @@ export class DbServiceService {
 
   // verify admin login
   verifyLogin(admin: Admin): Observable<any> {
-    const url = `${this.baseUrl}/login`;
+    const url = `${this.baseUrl}login`;
     return this.httpClient.post(url, admin);
   }
 

@@ -56,15 +56,23 @@ public class SurveyService {
   }
 
   public Admin verifyAdminLogin(Admin admin) {
+    System.out.println("Login attempt for email: " + admin.getEmail());
     Admin adminRes = adminRepository.findByEmail(admin.getEmail());
+    System.out.println("Found admin: " + adminRes);
 
     if (adminRes != null && admin.getPassword().equals(adminRes.getPassword())) {
-//      System.out.println(adminRes);
+      System.out.println("Password matched, returning: " + adminRes);
       return adminRes;
     }
 
     Admin fake = new Admin();
-    fake.setId(-1l);
+    fake.setId(-1L);
+    fake.setEmail("");
+    fake.setFirstName("");
+    fake.setLastName("");
+    fake.setPassword("");
+    fake.setIsPrimaryAdmin((short) 0);
+    System.out.println("Login failed, returning fake admin: " + fake);
     return fake;
   }
 

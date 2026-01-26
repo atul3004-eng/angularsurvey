@@ -55,6 +55,10 @@ public class RequestLoggingFilter implements Filter {
             } else {
                 logger.info(logMessage);
             }
+
+            // Write the cached response body to the actual response
+            byte[] responseBody = responseWrapper.getBody().getBytes(StandardCharsets.UTF_8);
+            response.getOutputStream().write(responseBody);
         }
     }
 

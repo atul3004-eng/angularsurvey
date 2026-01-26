@@ -10,6 +10,7 @@ import com.mahendra.survey.service.AdminService;
 import com.mahendra.survey.service.SurveyService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,10 +38,18 @@ public class SurveyController {
     surveyService.deleteSurvey(Long.valueOf(object.toString()));
   }
 
+  // test endpoint
+  @GetMapping("/test")
+  public String test() {
+    return "test works";
+  }
+
   // validates admin login
   @PostMapping("/login")
-  public Admin verifyAdminLogin(@RequestBody Admin admin) {
-    return surveyService.verifyAdminLogin(admin);
+  public ResponseEntity<Admin> verifyAdminLogin(@RequestBody Admin admin) {
+    Admin result = surveyService.verifyAdminLogin(admin);
+    System.out.println("Controller returning: " + result);
+    return ResponseEntity.ok(result);
   }
 
   // provides a survey for rendering so that respondent can take survey
