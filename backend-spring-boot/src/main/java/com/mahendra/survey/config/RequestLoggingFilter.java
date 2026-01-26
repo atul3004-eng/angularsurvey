@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -97,7 +97,7 @@ public class RequestLoggingFilter implements Filter {
     }
 
     // Wrapper to cache request body
-    private static class CachedRequestWrapper extends javax.servlet.http.HttpServletRequestWrapper {
+    private static class CachedRequestWrapper extends jakarta.servlet.http.HttpServletRequestWrapper {
         private final String body;
 
         public CachedRequestWrapper(HttpServletRequest request) throws IOException {
@@ -116,7 +116,7 @@ public class RequestLoggingFilter implements Filter {
     }
 
     // Wrapper to cache response body
-    private static class CachedResponseWrapper extends javax.servlet.http.HttpServletResponseWrapper {
+    private static class CachedResponseWrapper extends jakarta.servlet.http.HttpServletResponseWrapper {
         private final CachedServletOutputStream outputStream = new CachedServletOutputStream();
 
         public CachedResponseWrapper(HttpServletResponse response) {
