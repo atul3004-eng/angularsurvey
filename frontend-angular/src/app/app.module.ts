@@ -14,11 +14,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { QuestionComponent } from './components/question/question.component';
 import { CreateSurveyComponent } from './components/create-survey/create-survey.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { AddQuestionComponent } from './components/add-question/add-question.component';
 import { AddOptionsComponent } from './components/add-options/add-options.component';
 import { AddAdminComponent } from './components/add-admin/add-admin.component';
 import { SurveyDetailsComponent } from './components/survey-details/survey-details.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import { GoogleChartsModule } from 'angular-google-charts';
 
 
@@ -48,7 +49,7 @@ import { GoogleChartsModule } from 'angular-google-charts';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    NgbModule,
+    MatExpansionModule,
     GoogleChartsModule
   ],
   providers: [],

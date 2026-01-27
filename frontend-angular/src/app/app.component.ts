@@ -26,5 +26,6 @@ export class AppComponent implements AfterViewInit {
 
   logout(): void {
     this.authService.logout();
+    this.router.navigate(['/']);
   }
 }

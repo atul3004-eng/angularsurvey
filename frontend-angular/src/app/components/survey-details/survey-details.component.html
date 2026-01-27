@@ -1,4 +1,4 @@
-<ng-container *ngIf="!isLoggedIn()">{{ redirect() }}</ng-container>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav mr-auto">
@@ -18,9 +18,11 @@
     </ul>
   </div>
 </nav>
-<ngb-accordion [closeOthers]="true" activeIds="static-1">
-  <ngb-panel id="static-1" title="Survey Details">
-    <ng-template ngbPanelContent>
+<mat-accordion [multi]="false">
+  <mat-expansion-panel expanded="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>Survey Details</mat-panel-title>
+    </mat-expansion-panel-header>
       <table class="table" id="details">
         <tbody>
           <tr>
@@ -49,10 +51,11 @@
           </tr>
         </tbody>
       </table>
-    </ng-template>
-  </ngb-panel>
-  <ngb-panel id="static-2" title="Survey Responses">
-    <ng-template ngbPanelContent>
+  </mat-expansion-panel>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Survey Responses</mat-panel-title>
+    </mat-expansion-panel-header>
       <div>
         <h6>Filter by Date</h6>
         <div class="form-group">
@@ -89,10 +92,11 @@
           </tr>
         </tbody>
       </table>
-    </ng-template>
-  </ngb-panel>
-  <ngb-panel id="static-3" title="Export Options">
-    <ng-template ngbPanelContent>
+  </mat-expansion-panel>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Export Options</mat-panel-title>
+    </mat-expansion-panel-header>
       <h5>Survey Details</h5>
       <div class="row">
         <button class="btn btn-info col-sm-2" (click)="downloadCsv('details')">csv</button>
@@ -116,15 +120,15 @@
         <button class="btn btn-info col-sm-2 offset-sm-1" (click)="downloadJson('responses')">json</button>
         <!-- <button class="btn btn-info col-sm-2 offset-sm-1">pdf</button> -->
       </div>
-    </ng-template>
-  </ngb-panel>
-  <ngb-panel id="static-4" title="Charts">
-    <ng-template ngbPanelContent>
+  </mat-expansion-panel>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Charts</mat-panel-title>
+    </mat-expansion-panel-header>
       <div class="d-flex justify-content-center">
         <google-chart #chart [type]="type" [data]="data" [options]="options">
           <!-- [width]="width" [height]="height"> -->
         </google-chart>
       </div>
-    </ng-template>
-  </ngb-panel>
-</ngb-accordion>
+  </mat-expansion-panel>
+</mat-accordion>

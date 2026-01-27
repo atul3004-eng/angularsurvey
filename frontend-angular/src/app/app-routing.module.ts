@@ -7,22 +7,22 @@ import { TakeSurveyComponent } from './components/take-survey/take-survey.compon
 import { CreateSurveyComponent } from './components/create-survey/create-survey.component';
 import { AddAdminComponent } from './components/add-admin/add-admin.component';
 import { SurveyDetailsComponent } from './components/survey-details/survey-details.component';
-
+import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
-  { path: 'surveyDetails/:id', component: SurveyDetailsComponent},
-  { path: 'addAdmin', component: AddAdminComponent},
-  { path: 'createSurvey', component: CreateSurveyComponent }, 
+  { path: 'surveyDetails/:id', component: SurveyDetailsComponent, canActivate: [AuthGuard]},
+  { path: 'addAdmin', component: AddAdminComponent, canActivate: [AuthGuard]},
+  { path: 'createSurvey', component: CreateSurveyComponent, canActivate: [AuthGuard]},
   { path: 'takeSurvey/:id', component:  TakeSurveyComponent},
   { path: 'login', component: AdminLoginComponent},
-  { path: 'admin', component: AdminComponent },
+  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
   { path: 'surveycompleted', component: UserSurveyComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
