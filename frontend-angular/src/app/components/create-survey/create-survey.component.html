@@ -80,14 +80,17 @@
 
     <div>
         <div class="row">
-            <button (click)="addQuestion()" [disabled]="surveyQuestionFormArray.controls.length >= 5"
+            <button type="button" (click)="addQuestion()" [disabled]="surveyQuestionFormArray.controls.length >= 5"
                 class="btn btn-success offset-sm-1 col-sm-4">Add New
                 Question</button>
 
-            <button (click)="submitSurvey()"
-                [disabled]="newSurveyForm.invalid || surveyQuestionFormArray.controls.length === 0"
+            <button type="button" (click)="submitSurvey()"
+                [disabled]="isSubmitting || newSurveyForm.invalid || surveyQuestionFormArray.controls.length === 0"
                 class="btn btn-success offset-sm-2 col-sm-4">Create
                 Survey</button>
+        </div>
+        <div *ngIf="submitError" class="alert alert-danger mt-2" role="alert">
+            {{ submitError }}
         </div>
         <p></p>
         <!-- only used while developing form, to show formgroup in console -->
@@ -104,6 +107,9 @@
     <p>
         Successfully created survey with id: {{ submittedSurveyDetails?.id }}
     </p>
+    <div *ngIf="copyMessage" class="alert alert-success" role="status">
+        {{ copyMessage }}
+    </div>
     <div class="form-group form-row">
         <input type="text" class="form-control col-sm-8" [value]="surveyLink" id="copyText" #textToCopy disabled>
         <button (click)="copyToClipboard()" class=".offset-sm-1 col-sm-2">Copy Link</button>

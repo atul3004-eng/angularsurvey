@@ -26,6 +26,9 @@ export class CreateSurveyComponent implements OnInit {
   questionsForDisplay: any;
   submittedSurveyDetails: SurveyHeader;
   surveyLink: string = "";
+  copyMessage: string = "";
+  submitError: string = "";
+  isSubmitting: boolean = false;
 
   constructor(private fb: FormBuilder, private newFormService: CreateNewFormService, private dbService: DbServiceService,
     private authService: AuthService, private router: Router) { }
@@ -100,14 +103,22 @@ export class CreateSurveyComponent implements OnInit {
   }
 
   submitSurvey(): void {
+    this.submitError = "";
+    this.isSubmitting = true;
     let survey = this.createSurveyObjectFromForm();
     this.dbService.saveNewSurvey(survey).subscribe(
       data => {
         this.submittedSurveyDetails = data;
-        this.surveyLink = "localhost:4200/takeSurvey/" + data.id;
+        this.surveyLink = `${window.location.origin}/#/takeSurvey/${data.id}`;
+        this.newFormService.success();
+        this.isSubmitting = false;
+      },
+      err => {
+        const status = err?.status ? ` (status ${err.status})` : "";
+        this.submitError = `Failed to create survey${status}. Check backend and try again.`;
+        this.isSubmitting = false;
       }
     );
-    this.newFormService.success();
   }
 
   addQuestion(): void {
@@ -126,10 +137,11 @@ export class CreateSurveyComponent implements OnInit {
 
   createSurveyObjectFromForm(): SurveyFull {
     let survey: SurveyFull = new SurveyFull();
+    survey.id = 0;
     survey.created = new Date();
     survey.name = this.newSurveyForm.value.surveyName;
     survey.description = this.newSurveyForm.value.description;
-    survey.validTill = this.newSurveyForm.value.validTill;
+    survey.validTill = new Date(this.newSurveyForm.value.validTill);
     survey.questions = [];
 
     let questionsArray = this.newSurveyForm.value.questions.value;
@@ -157,14 +169,35 @@ export class CreateSurveyComponent implements OnInit {
     return survey;
   }
 
-  copyToClipboard() {
-    let item = this.surveyLink;
-    document.addEventListener('copy', (e: ClipboardEvent) => {
-      e.clipboardData.setData('text/plain', (item));
-      e.preventDefault();
-      document.removeEventListener('copy', null);
-    });
-    document.execCommand('copy');
+  async copyToClipboard() {
+    const item = this.surveyLink;
+    if (!item) return;
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(item);
+      this.showCopyMessage();
+      return;
+    }
+    const textarea = document.createElement('textarea');
+    textarea.value = item;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    try {
+      document.execCommand('copy');
+      this.showCopyMessage();
+    } finally {
+      document.body.removeChild(textarea);
+    }
+  }
+
+  private showCopyMessage(): void {
+    this.copyMessage = "Link copied to clipboard";
+    setTimeout(() => {
+      this.copyMessage = "";
+    }, 2500);
   }
 
   isLoggedIn(): boolean {
