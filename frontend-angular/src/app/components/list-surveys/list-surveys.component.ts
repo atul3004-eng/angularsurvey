@@ -32,7 +32,7 @@ export class ListSurveysComponent implements OnInit {
   }
 
   copyToClipboard(id) {
-    let item = 'localhost:4200/takeSurvey/' + id;
+    let item = `${window.location.origin}/#/takeSurvey/${id}`;
     document.addEventListener('copy', (e: ClipboardEvent) => {
       e.clipboardData.setData('text/plain', (item));
       e.preventDefault();
