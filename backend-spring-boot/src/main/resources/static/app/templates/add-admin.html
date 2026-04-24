@@ -1,0 +1,67 @@
+<section class="page-head">
+  <div>
+    <h1>Add Admin</h1>
+    <p>Create another administrator without leaving the Spring Boot application.</p>
+  </div>
+</section>
+
+<section class="panel card border-0 shadow-sm" ng-if="!vm.added">
+  <div class="card-body">
+  <form name="adminForm" novalidate ng-submit="vm.addAdmin(adminForm)" class="form-grid">
+    <div class="field">
+      <label for="firstName">First Name</label>
+      <input id="firstName" name="firstName" type="text" class="form-control" ng-model="vm.form.firstName" ng-minlength="2" required>
+      <div class="error-text" ng-if="adminForm.firstName.$touched && adminForm.firstName.$invalid">
+        First name must be at least 2 characters.
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="lastName">Last Name</label>
+      <input id="lastName" name="lastName" type="text" class="form-control" ng-model="vm.form.lastName" ng-minlength="2" required>
+      <div class="error-text" ng-if="adminForm.lastName.$touched && adminForm.lastName.$invalid">
+        Last name must be at least 2 characters.
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="adminEmail">Email</label>
+      <input id="adminEmail" name="email" type="email" class="form-control" ng-model="vm.form.email" required>
+      <div class="error-text" ng-if="adminForm.email.$touched && adminForm.email.$invalid">
+        A valid email address is required.
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="adminPassword">Password</label>
+      <input id="adminPassword" name="password" type="password" class="form-control" ng-model="vm.form.password" ng-minlength="6" ng-maxlength="15" required>
+      <div class="error-text" ng-if="adminForm.password.$touched && adminForm.password.$invalid">
+        Password must be between 6 and 15 characters.
+      </div>
+    </div>
+
+    <div class="field full">
+      <div class="error-text" ng-if="vm.error">{{ vm.error }}</div>
+    </div>
+
+    <div class="field full">
+      <div class="action-row">
+        <button type="submit" class="btn btn-success" ng-disabled="vm.loading">
+          {{ vm.loading ? 'Saving...' : 'Add Admin' }}
+        </button>
+        <a class="btn btn-outline-secondary" href="#/admin">Back to Admin Home</a>
+      </div>
+    </div>
+  </form>
+  </div>
+</section>
+
+<section class="panel soft card border-0 shadow-sm" ng-if="vm.added">
+  <div class="card-body">
+  <h2>Admin Added Successfully</h2>
+  <p>The new administrator can now log in with the email and password you provided.</p>
+  <div class="action-row">
+    <a class="btn btn-success" href="#/admin">Return to Admin Home</a>
+  </div>
+  </div>
+</section>

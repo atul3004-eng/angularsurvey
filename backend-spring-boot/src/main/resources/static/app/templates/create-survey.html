@@ -1,0 +1,155 @@
+<section class="page-head">
+  <div>
+    <h1>Create Survey</h1>
+    <p>Build a survey in plain JavaScript and publish a public link without a frontend build step.</p>
+  </div>
+</section>
+
+<section class="row g-4">
+  <div class="col-lg-7">
+  <div class="panel card border-0 shadow-sm h-100">
+    <div class="card-body">
+    <h2>Survey Details</h2>
+    <form name="surveyForm" novalidate class="stack">
+      <div class="field">
+        <label for="surveyName">Survey Name</label>
+        <input id="surveyName" name="surveyName" type="text" class="form-control" ng-model="vm.survey.surveyName" required>
+      </div>
+
+      <div class="field">
+        <label for="validTill">Valid Till</label>
+        <input id="validTill" name="validTill" type="date" class="form-control" ng-model="vm.survey.validTill" required>
+      </div>
+
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" class="form-control" ng-model="vm.survey.description" required></textarea>
+      </div>
+    </form>
+
+    <div class="page-head compact">
+      <div>
+        <h2>Add Question</h2>
+        <p>Maximum {{ vm.maxQuestions }} questions per survey.</p>
+      </div>
+    </div>
+
+    <form name="questionForm" novalidate class="stack" ng-submit="vm.addQuestion(questionForm)">
+      <div class="field">
+        <label for="questionText">Question</label>
+        <input id="questionText" name="questionText" type="text" class="form-control" ng-model="vm.draftQuestion.question" required>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="questionType">Question Type</label>
+          <select id="questionType" name="questionType" class="form-select" ng-model="vm.draftQuestion.questionType" required>
+            <option ng-repeat="item in vm.questionTypes" value="{{ item.value }}">{{ item.label }}</option>
+          </select>
+        </div>
+
+        <div class="field" ng-if="!vm.needsOptions()">
+          <label for="validation">Validation</label>
+          <select id="validation" name="validation" class="form-select" ng-model="vm.draftQuestion.validation">
+            <option ng-repeat="item in vm.validationTypes" value="{{ item.value }}">{{ item.label }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field" ng-if="vm.needsOptions()">
+        <label>Options</label>
+        <div class="option-row">
+          <input type="text" class="form-control" ng-model="vm.draftQuestion.newOption" placeholder="Add option text">
+          <button type="button" class="btn btn-outline-primary" ng-click="vm.addOption()">Add Option</button>
+        </div>
+        <div class="option-list" ng-if="vm.draftQuestion.options.length">
+          <div class="radio-option" ng-repeat="option in vm.draftQuestion.options track by $index">
+            <span>{{ option }}</span>
+            <button type="button" class="btn btn-outline-danger btn-sm" ng-click="vm.removeOption($index)">Remove</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="error-text" ng-if="vm.questionError">{{ vm.questionError }}</div>
+
+      <div class="action-row">
+        <button type="submit" class="btn btn-dark" ng-disabled="vm.questions.length >= vm.maxQuestions">Add Question</button>
+        <button type="button" class="btn btn-outline-secondary" ng-click="vm.resetDraft()">Clear Draft</button>
+      </div>
+    </form>
+  </div>
+  </div>
+  </div>
+
+  <div class="col-lg-5">
+  <div class="stack">
+    <section class="panel card border-0 shadow-sm">
+      <div class="card-body">
+      <div class="page-head compact">
+        <div>
+          <h2>Added Questions</h2>
+          <p>Review the payload that will be sent to the backend.</p>
+        </div>
+      </div>
+
+      <div class="empty-state" ng-if="!vm.questions.length">
+        <h3>No questions yet</h3>
+        <p>Add at least one question before creating the survey.</p>
+      </div>
+
+      <div class="stack" ng-if="vm.questions.length">
+        <article class="question-card" ng-repeat="question in vm.questions track by $index">
+          <div class="question-title">
+            <div>
+              <strong>Q{{ $index + 1 }}. {{ question.question }}</strong>
+              <div class="question-meta">
+                <span class="badge text-bg-primary">{{ question.questionType | questionTypeLabel }}</span>
+                <span class="badge text-bg-secondary" ng-if="question.validation">{{ question.validation }}</span>
+              </div>
+            </div>
+            <button type="button" class="btn btn-outline-danger btn-sm" ng-click="vm.removeQuestion($index)">Remove</button>
+          </div>
+          <div class="option-list" ng-if="question.options.length">
+            <div class="radio-option" ng-repeat="option in question.options track by $index">{{ option }}</div>
+          </div>
+        </article>
+      </div>
+      </div>
+    </section>
+
+    <section class="panel card border-0 shadow-sm">
+      <div class="card-body">
+      <h2>Publish Survey</h2>
+      <p>The frontend is served from Spring Boot, so the generated link will use the same host and port.</p>
+      <div class="error-text" ng-if="vm.submitError">{{ vm.submitError }}</div>
+      <div class="action-row">
+        <button
+          type="button"
+          class="btn btn-success"
+          ng-click="vm.createSurvey(surveyForm)"
+          ng-disabled="vm.isSubmitting || surveyForm.$invalid || !vm.questions.length"
+        >
+          {{ vm.isSubmitting ? 'Creating...' : 'Create Survey' }}
+        </button>
+        <button type="button" class="btn btn-outline-secondary" ng-click="vm.resetForm()">Reset</button>
+      </div>
+      </div>
+    </section>
+
+    <section class="panel soft card border-0 shadow-sm" ng-if="vm.createdSurvey">
+      <div class="card-body">
+      <h2>Survey Created</h2>
+      <p>Survey ID: <strong>{{ vm.createdSurvey.id }}</strong></p>
+      <div class="field">
+        <label>Public Link</label>
+        <input type="text" class="form-control" ng-value="vm.createdSurvey.link" readonly>
+      </div>
+      <div class="action-row">
+        <button type="button" class="btn btn-success" ng-click="vm.copyCreatedLink()">Copy Link</button>
+        <a class="btn btn-outline-secondary" ng-href="{{ vm.createdSurvey.link }}">Open Survey</a>
+      </div>
+      </div>
+    </section>
+  </div>
+  </div>
+</section>

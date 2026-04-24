@@ -33,9 +33,11 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(classes = CampaignRegistrationManagementSystemApplication.class)
 @Import(TestConfig.class)
+@ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CampaignRegistrationManagementSystemApplicationTests {
 
@@ -53,7 +55,7 @@ class CampaignRegistrationManagementSystemApplicationTests {
   void contextLoads() {}
 
   @Test
-  @Order(5)
+  @Order(6)
   void testSurveyService() {
     SurveyFull surveyFull = surveyService.getSurvey(1L);
     //    9545163336
@@ -62,7 +64,7 @@ class CampaignRegistrationManagementSystemApplicationTests {
 
   // let's try adding an answer to our database
   @Test
-  @Order(4)
+  @Order(5)
   void addAnswer() {
     Answers answer = new Answers();
     Respondant respondant = new Respondant();
@@ -93,7 +95,7 @@ class CampaignRegistrationManagementSystemApplicationTests {
   // in this test we add a question to questions table, also add options (for MCQs) to
   // questions_options table
   @Test
-  @Order(3)
+  @Order(4)
   void addQuestion() {
     Questions questions = new Questions();
     InputTypes inputTypes = inputTypesRepository.findById(3L).get();
@@ -117,7 +119,7 @@ class CampaignRegistrationManagementSystemApplicationTests {
   }
 
   @Test
-  @Order(1)
+  @Order(2)
   void fillSurveyHeaders() {
     SurveyHeader surveyHeader = new SurveyHeader();
     surveyHeader.setSurveyName("test_survey");
@@ -130,7 +132,7 @@ class CampaignRegistrationManagementSystemApplicationTests {
   }
 
   @Test
-  @Order(2)
+  @Order(3)
   void fillAdmin() {
     Admin admin = new Admin();
     admin.setFirstName("b");
@@ -149,7 +151,7 @@ class CampaignRegistrationManagementSystemApplicationTests {
   }
 
   @Test
-  @Order(7)
+  @Order(1)
   void fillTypes() {
     List<String> inputTypesList =
         Arrays.asList("radio", "checkbox_multiselect", "oneline", "multiline");
@@ -175,7 +177,7 @@ class CampaignRegistrationManagementSystemApplicationTests {
   }
 
   @Test
-  @Order(6)
+  @Order(7)
   void testSaveNewSurvey() {
     SurveyHeader surveyHeader = new SurveyHeader();
     surveyHeader.setSurveyName("test survey");

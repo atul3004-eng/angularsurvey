@@ -1,0 +1,59 @@
+<section class="page-head">
+  <div>
+    <h1>Survey Administration</h1>
+    <p>Manage active surveys, copy participant links, remove old surveys, and open response details.</p>
+  </div>
+  <div class="action-row">
+    <a class="btn btn-success" href="#/createSurvey">Create Survey</a>
+    <a class="btn btn-outline-secondary" href="#/addAdmin">Add Admin</a>
+  </div>
+</section>
+
+<section class="panel card border-0 shadow-sm">
+  <div class="card-body">
+  <div class="page-head compact">
+    <div>
+      <h2>Active Surveys</h2>
+      <p>Public survey links stay available until the survey expires or is deleted.</p>
+    </div>
+    <button type="button" class="btn btn-outline-primary" ng-click="vm.loadSurveys()">Refresh</button>
+  </div>
+
+  <div class="error-text" ng-if="vm.error">{{ vm.error }}</div>
+
+  <div class="empty-state" ng-if="!vm.loading && !vm.surveys.length">
+    <h3>No surveys available</h3>
+    <p>Create a survey to generate a new participant link.</p>
+    <a class="btn btn-success" href="#/createSurvey">Create Your First Survey</a>
+  </div>
+
+  <div class="table-wrap" ng-if="vm.surveys.length">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Survey Name</th>
+          <th>Public Link</th>
+          <th>Details</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="survey in vm.surveys track by survey.id">
+          <td>{{ $index + 1 }}</td>
+          <td>{{ survey.surveyName }}</td>
+          <td>
+            <button type="button" class="btn btn-outline-info btn-sm" ng-click="vm.copyLink(survey.id)">Copy Link</button>
+          </td>
+          <td>
+            <a class="btn btn-outline-secondary btn-sm" ng-href="{{ vm.detailsLink(survey.id) }}">View Details</a>
+          </td>
+          <td>
+            <button type="button" class="btn btn-outline-danger btn-sm" ng-click="vm.deleteSurvey(survey.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</section>

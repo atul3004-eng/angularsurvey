@@ -1,0 +1,56 @@
+<section class="hero row g-4 align-items-stretch">
+  <div class="col-lg-7">
+    <div class="panel soft card border-0 shadow-sm h-100">
+      <div class="card-body p-4 p-lg-5">
+        <span class="eyebrow">Legacy AngularJS Frontend</span>
+        <h1>Run the survey system without Node.js or npm.</h1>
+        <p>
+          This frontend is now built with AngularJS 1.x and plain JavaScript, served directly by Spring Boot.
+          Admins can create surveys, review responses, and share public links from one app.
+        </p>
+        <div class="stack">
+          <div class="note alert alert-info mb-0">Backend URL: <strong>http://localhost:8080</strong></div>
+          <div class="note alert alert-light mb-0">Public survey links use hash routes like <strong>#/takeSurvey/1</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="panel card border-0 shadow-sm h-100">
+      <div class="card-body p-4 p-lg-5">
+        <div class="page-head compact">
+          <div>
+            <h2>Admin Login</h2>
+            <p>Use your admin email and password to manage surveys.</p>
+          </div>
+        </div>
+
+        <form name="loginForm" novalidate ng-submit="vm.login(loginForm)" class="stack">
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" class="form-control" ng-model="vm.form.email" required>
+            <div class="error-text" ng-if="loginForm.email.$touched && loginForm.email.$invalid">
+              A valid email address is required.
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" class="form-control" ng-model="vm.form.password" required>
+            <div class="error-text" ng-if="loginForm.password.$touched && loginForm.password.$invalid">
+              Password is required.
+            </div>
+          </div>
+
+          <div class="error-text" ng-if="vm.error">{{ vm.error }}</div>
+
+          <div class="action-row">
+            <button type="submit" class="btn btn-success btn-lg" ng-disabled="vm.loading">
+              {{ vm.loading ? 'Signing In...' : 'Login' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

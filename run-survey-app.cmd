@@ -2,7 +2,6 @@
 setlocal
 
 start "Survey Backend" cmd /k "%~dp0run-backend.cmd"
-start "Survey Frontend" cmd /k "%~dp0run-frontend.cmd"
 
-echo Backend:  http://localhost:8080
-echo Frontend: http://localhost:4200
+echo Survey app: http://localhost:8080
+echo Frontend is served by Spring Boot. No Node.js or npm is required.

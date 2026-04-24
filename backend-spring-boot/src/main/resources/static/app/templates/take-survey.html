@@ -1,0 +1,117 @@
+<section class="panel card border-0 shadow-sm" ng-if="vm.loading">
+  <div class="card-body">
+  <p>Loading survey...</p>
+  </div>
+</section>
+
+<section class="panel card border-0 shadow-sm" ng-if="vm.error">
+  <div class="card-body">
+  <div class="error-text">{{ vm.error }}</div>
+  </div>
+</section>
+
+<div class="stack" ng-if="!vm.loading && vm.survey">
+  <section class="panel soft card border-0 shadow-sm">
+    <div class="card-body">
+    <span class="eyebrow">Public Survey</span>
+    <h1>{{ vm.survey.name }}</h1>
+    <p>{{ vm.survey.description }}</p>
+    <div class="note alert alert-danger mb-0" ng-if="vm.surveyExpired">
+      This survey has expired or is no longer available.
+    </div>
+    </div>
+  </section>
+
+  <section class="panel card border-0 shadow-sm" ng-if="!vm.surveyExpired && !vm.personalStepComplete">
+    <div class="card-body">
+    <div class="page-head compact">
+      <div>
+        <h2>Enter Your Details</h2>
+        <p>We use this to prevent duplicate submissions for the same survey.</p>
+      </div>
+    </div>
+    <form name="detailsForm" novalidate ng-submit="vm.startSurvey(detailsForm)" class="stack">
+      <div class="field">
+        <label for="fullName">Full Name</label>
+        <input id="fullName" name="fullName" type="text" class="form-control" ng-model="vm.personalDetails.fullName" required>
+        <div class="error-text" ng-if="detailsForm.fullName.$touched && detailsForm.fullName.$invalid">
+          Full name is required.
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="respondentEmail">Email</label>
+        <input id="respondentEmail" name="email" type="email" class="form-control" ng-model="vm.personalDetails.email" required>
+        <div class="error-text" ng-if="detailsForm.email.$touched && detailsForm.email.$invalid">
+          A valid email address is required.
+        </div>
+      </div>
+
+      <div class="error-text" ng-if="vm.message">{{ vm.message }}</div>
+
+      <div class="action-row">
+        <button type="submit" class="btn btn-success">Next</button>
+      </div>
+    </form>
+    </div>
+  </section>
+
+  <section class="panel card border-0 shadow-sm" ng-if="!vm.surveyExpired && vm.personalStepComplete">
+    <div class="card-body">
+    <div class="page-head compact">
+      <div>
+        <h2>Survey Questions</h2>
+        <p>Questions marked as required must be answered.</p>
+      </div>
+    </div>
+
+    <div class="stack">
+      <article class="question-card" ng-repeat="question in vm.questions track by question.id">
+        <div class="question-title">
+          <div>
+            <strong>Q{{ $index + 1 }}. {{ question.label }}</strong>
+            <p ng-if="question.validation">Validation: {{ question.validation }}</p>
+          </div>
+        </div>
+
+        <div class="field" ng-if="question.controlType === 'oneline'">
+          <input type="text" class="form-control" ng-model="question.answer">
+          <div class="error-text" ng-if="vm.questionsSubmitted && !vm.isQuestionValid(question)">
+            Provide a valid answer for this question.
+          </div>
+        </div>
+
+        <div class="field" ng-if="question.controlType === 'multiline'">
+          <textarea class="form-control" ng-model="question.answer"></textarea>
+          <div class="error-text" ng-if="vm.questionsSubmitted && !vm.isQuestionValid(question)">
+            Provide a valid answer for this question.
+          </div>
+        </div>
+
+        <div class="check-list" ng-if="question.controlType === 'radio'">
+          <label class="radio-option" ng-repeat="option in question.options track by option.id">
+            <input type="radio" ng-model="question.selectedOptionId" ng-value="option.id" name="radio_{{ question.id }}">
+            <span>{{ option.name }}</span>
+          </label>
+        </div>
+
+        <div class="check-list" ng-if="question.controlType === 'checkbox'">
+          <label class="checkbox-option" ng-repeat="option in question.options track by option.id">
+            <input type="checkbox" ng-model="option.checked">
+            <span>{{ option.name }}</span>
+          </label>
+          <div class="error-text" ng-if="vm.questionsSubmitted && !vm.isQuestionValid(question)">
+            Select one or more options.
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="error-text" ng-if="vm.message">{{ vm.message }}</div>
+
+    <div class="action-row">
+      <button type="button" class="btn btn-success" ng-click="vm.submitSurvey()">Save Response</button>
+    </div>
+    </div>
+  </section>
+</div>
